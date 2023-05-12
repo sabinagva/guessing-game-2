@@ -5,8 +5,8 @@ const PORT = 5000;
 
 
 let playerGuesses = [
-  {player:'Ismail', Guess: '1'},
-  {player:'Sabina', Guess: '2'}
+  {ismailGuess: '1', sabinaGuess: '2'}
+  
 ]
 
 
@@ -16,39 +16,42 @@ app.use(bodyParser.urlencoded({extended:true}))
 // Serve up static files (HTML, CSS, Client JS)
 app.use(express.static('server/public'));
 
-function getRandomNum (min, max) {
-  return Math.random() * (max - min) + min;
+function getRandomNum () {
+  return Math.random() * (25 - 1) + 1;
 }
 
 // GET & POST Routes go here
-//get
+//getting it for the client
 app.get('/guesses', function(req,res){
   console.log('request for the guesses was made');
   res.send(playerGuesses) //this will give us player guesses
+  console.log(playerGuesses);
 })
-//post
+//posting to the client
 app.post('/guesses', function(req,res){
   console.log('post my guesses', req.body);
   playerGuesses.push(req.body); //so we can push new guess 
   res.sendStatus(201) //server response
-  
+  console.log(playerGuesses)
+  randomNumComparison()
 })
 
 
 //Random number function
-function randomNumComparison(){
+function randomNumComparison(playerGuesses){
   let randomNumber = getRandomNum()
-  if( randomNumber === playerGuesses.Guess){
-    return ''
+  if(( randomNumber === playerGuesses.ismailGuess) || (randomNumber === playerGuesses.sabinaGuess)){
+    return 'Yay you are the winner!'
 
   }
-  if(randomNumber < playerGuesses.Guess){
-    return ''
+  else if((randomNumber < playerGuesses.sabinaGuess) || (randomNumber < playerGuesses.ismailGuess)){
+    return 'Your are too high relax!!!'
   }
-  if(randomNumber > playerGuesses.Guess){
-    return ''
+  else if((randomNumber > playerGuesses.sabinaGuess) || (randomNumber > playerGuesses.ismailGuess)){
+    return 'You are too low loser!'
   }
 }
+
 
 //get number 
 // app.get('/randomNumber', function(req,res){
